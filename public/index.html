@@ -2215,13 +2215,32 @@ async function buscarML(query, idx) {
   mlCard.scrollIntoView({ behavior:'smooth', block:'nearest' });
 
   try {
-    const r = await fetch(`/api/ml?q=${encodeURIComponent(query)}&limit=5`);
+    // Llamada directa al browser — ML permite CORS desde browsers, bloquea datacenters
+    const r = await fetch(
+      `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(query)}&limit=5&condition=new`,
+      { headers: { 'Accept': 'application/json' } }
+    );
+    if (!r.ok) throw new Error(`ML respondió ${r.status}`);
     const data = await r.json();
 
-    // Update dolar if API returned it
-    if (data.dolar_blue) dolarBlue = data.dolar_blue;
+    const rawItems = data.results || [];
+    if (!rawItems.length) {
+      document.getElementById('ml-body').innerHTML =
+        `<div style="padding:16px;font-size:12px;color:var(--text-muted)">Sin resultados para "${query}". Probá una búsqueda más general.</div>`;
+      document.getElementById('ml-count-text').textContent = '0 resultados';
+      return;
+    }
 
-    const items = data.items || [];
+    const items = rawItems.map(item => ({
+      titulo: item.title,
+      precio: Math.round(item.price),
+      precio_usd: Math.round(item.price / dolarBlue),
+      envio_gratis: item.shipping?.free_shipping || false,
+      vendedor: item.seller?.nickname || '',
+      thumbnail: (item.thumbnail || '').replace('http://', 'https://'),
+      link: item.permalink,
+      ubicacion: item.seller_address?.city?.name || item.seller_address?.state?.name || '',
+    }));
     if (!items.length) {
       document.getElementById('ml-body').innerHTML =
         `<div style="padding:16px;font-size:12px;color:var(--text-muted)">Sin resultados para "${query}". Probá una búsqueda más general.</div>`;
