@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "functions": {
+    "api/analizar.js": { "maxDuration": 30 },
+    "api/ml.js":       { "maxDuration": 15 },
+    "api/dolar.js":    { "maxDuration": 10 }
+  },
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)",     "dest": "/public/$1" }
+  ]
+}

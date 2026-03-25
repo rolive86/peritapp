@@ -1,0 +1,2504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SiniestroAI — Plataforma de Peritaje Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─────────────────────────────────── */
+:root {
+  --navy:       #003781;
+  --navy-deep:  #002560;
+  --navy-mid:   #0046a6;
+  --navy-light: #1a5fb4;
+  --blue-mist:  #e8eef7;
+  --blue-pale:  #f0f4fb;
+  --accent:     #0066cc;
+  --gold:       #c8a84b;
+  --white:      #ffffff;
+  --off-white:  #f7f8fc;
+  --border:     #dde3ef;
+  --border-mid: #c4cedf;
+  --text:       #0d1b2e;
+  --text-mid:   #3a4a60;
+  --text-muted: #7a8a9e;
+  --success:    #0d7a4e;
+  --warning:    #b55a00;
+  --danger:     #b50022;
+  --success-bg: #edf7f2;
+  --warning-bg: #fdf3e8;
+  --danger-bg:  #fdeef1;
+  --shadow-sm:  0 1px 3px rgba(0,55,129,0.08);
+  --shadow-md:  0 4px 16px rgba(0,55,129,0.10);
+  --shadow-lg:  0 8px 32px rgba(0,55,129,0.14);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 400;
+  background: var(--off-white);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── UTILITIES ──────────────────────────────── */
+.hidden { display: none !important; }
+.serif { font-family: 'Playfair Display', serif; }
+.condensed { font-family: 'Barlow Condensed', sans-serif; }
+
+/* ─── VIEWS ──────────────────────────────────── */
+.view { display: none; min-height: 100vh; }
+.view.active { display: flex; }
+
+/* ═══════════════════════════════════════════════
+   VIEW 1 — LOGIN
+═══════════════════════════════════════════════ */
+#v-login {
+  background: var(--white);
+  flex-direction: row;
+}
+
+.login-left {
+  width: 52%;
+  background: var(--navy-deep);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 56px 64px;
+}
+
+.login-left::before {
+  content: '';
+  position: absolute;
+  top: -120px; right: -120px;
+  width: 480px; height: 480px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.login-left::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -80px;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.login-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.login-brand {
+  position: relative;
+  z-index: 2;
+}
+.login-brand-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-dot { color: var(--gold); }
+.login-brand-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-top: 6px;
+}
+
+.login-hero { position: relative; z-index: 2; }
+.login-hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+.login-hero-title em {
+  font-style: italic;
+  color: rgba(255,255,255,0.55);
+}
+.login-hero-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+  max-width: 340px;
+}
+
+.login-stats {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 32px;
+}
+.login-stat-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--white);
+}
+.login-stat-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.login-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+}
+
+.login-form-wrap {
+  width: 100%;
+  max-width: 380px;
+}
+
+.login-form-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.login-form-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 36px;
+}
+
+.form-field { margin-bottom: 18px; }
+.form-label {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  margin-bottom: 7px;
+}
+.form-input {
+  width: 100%;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-input:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(0,55,129,0.08);
+}
+
+.btn-login {
+  width: 100%;
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  padding: 14px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  margin-top: 8px;
+}
+.btn-login:hover { background: var(--navy-mid); transform: translateY(-1px); }
+
+.login-footer-note {
+  margin-top: 24px;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════
+   SHELL — sidebar + topbar
+═══════════════════════════════════════════════ */
+#v-operador, #v-analisis, #v-backoffice {
+  flex-direction: row;
+}
+
+.sidebar {
+  width: 220px;
+  background: var(--navy-deep);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 50;
+}
+
+.sidebar-brand {
+  padding: 28px 24px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.sidebar-brand-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.3px;
+}
+.sidebar-brand-name span { color: var(--gold); }
+.sidebar-brand-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-top: 3px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-section-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  padding: 14px 12px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+.nav-item.active { background: rgba(255,255,255,0.1); color: var(--white); }
+.nav-item.active .nav-icon { opacity: 1; }
+.nav-icon { font-size: 15px; opacity: 0.6; flex-shrink: 0; }
+.nav-badge {
+  margin-left: auto;
+  background: var(--gold);
+  color: var(--navy-deep);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 99px;
+}
+
+.sidebar-user {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.user-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--navy-mid);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--white);
+  flex-shrink: 0;
+}
+.user-name { font-size: 12px; color: rgba(255,255,255,0.75); font-weight: 500; }
+.user-role { font-size: 10px; color: rgba(255,255,255,0.35); }
+
+.main-area {
+  margin-left: 220px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  box-shadow: var(--shadow-sm);
+}
+.topbar-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.3px;
+}
+.topbar-title span {
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: 4px;
+}
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.topbar-dolar {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 10px;
+  display: flex;
+  gap: 6px;
+}
+.topbar-dolar strong { color: var(--navy); }
+.topbar-date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.page-content { flex: 1; padding: 32px; }
+
+/* ─── CARDS ──────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+}
+.card-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-mid);
+  text-transform: uppercase;
+}
+.card-body { padding: 20px; }
+
+/* ─── BADGES / TAGS ──────────────────────────── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 3px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.tag-pending  { background: var(--warning-bg); color: var(--warning); }
+.tag-review   { background: var(--blue-mist);  color: var(--navy); }
+.tag-approved { background: var(--success-bg); color: var(--success); }
+.tag-rejected { background: var(--danger-bg);  color: var(--danger); }
+.tag-alto     { background: var(--danger-bg);  color: var(--danger); }
+.tag-medio    { background: var(--warning-bg); color: var(--warning); }
+.tag-bajo     { background: var(--success-bg); color: var(--success); }
+
+/* ─── BUTTONS ────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 5px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+}
+.btn-primary { background: var(--navy); color: var(--white); }
+.btn-primary:hover { background: var(--navy-mid); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-outline { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+.btn-outline:hover { background: var(--blue-pale); }
+.btn-ghost { background: transparent; color: var(--text-mid); border: 1.5px solid var(--border); }
+.btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+.btn-gold { background: var(--gold); color: var(--white); }
+.btn-gold:hover { background: #b8962e; }
+.btn-sm { padding: 6px 12px; font-size: 11px; }
+.btn-full { width: 100%; justify-content: center; }
+
+/* ═══════════════════════════════════════════════
+   VIEW 2 — OPERADOR DASHBOARD
+═══════════════════════════════════════════════ */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--navy);
+}
+.kpi-card.gold::after { background: var(--gold); }
+.kpi-card.success::after { background: var(--success); }
+.kpi-card.warning::after { background: var(--warning); }
+
+.kpi-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.kpi-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.kpi-sub { font-size: 11px; color: var(--text-muted); }
+.kpi-change {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--success);
+}
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+}
+
+/* Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.data-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--off-white);
+  border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: 13px 14px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.data-table tr:last-child td { border: none; }
+.data-table tbody tr { cursor: pointer; transition: background 0.12s; }
+.data-table tbody tr:hover td { background: var(--blue-pale); }
+
+.exp-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--navy);
+}
+.exp-auto { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.queue-list { display: flex; flex-direction: column; gap: 10px; }
+.queue-item {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.queue-item:hover { border-color: var(--navy); background: var(--blue-pale); transform: translateX(2px); }
+.queue-item.urgent { border-left: 3px solid var(--danger); }
+.queue-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.queue-info { flex: 1; }
+.queue-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.queue-desc { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.queue-time { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════════════
+   VIEW 3 — ANÁLISIS IA + ML
+═══════════════════════════════════════════════ */
+.analisis-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.drop-zone {
+  border: 2px dashed var(--border-mid);
+  border-radius: 8px;
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  background: var(--off-white);
+  margin-bottom: 14px;
+}
+.drop-zone:hover { border-color: var(--navy); background: var(--blue-pale); }
+.drop-zone.filled { border-style: solid; border-color: var(--border); background: #000; }
+.drop-zone img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+.drop-zone.filled img { display: block; }
+.drop-zone.filled .drop-ph { display: none; }
+.drop-ph {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 10px; text-align: center; padding: 24px;
+}
+.drop-icon { font-size: 32px; opacity: 0.35; }
+.drop-ph-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-mid);
+}
+.drop-ph-sub { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+.drop-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  padding: 12px;
+  display: none;
+}
+.drop-zone.filled .drop-overlay { display: block; }
+.drop-overlay-text { font-size: 11px; color: rgba(255,255,255,0.7); font-family: 'Barlow Condensed', sans-serif; }
+
+input[type=file] { display: none; }
+
+.demo-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.demo-btn {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 9px 10px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 11px;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  line-height: 1.4;
+}
+.demo-btn:hover { border-color: var(--navy); color: var(--navy); background: var(--blue-pale); }
+.demo-btn .di { font-size: 18px; display: block; margin-bottom: 3px; }
+
+/* IA Result */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 24px;
+  gap: 14px;
+  text-align: center;
+  min-height: 300px;
+}
+.empty-icon { font-size: 36px; opacity: 0.2; }
+.empty-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--text-muted);
+}
+.empty-sub { font-size: 13px; color: var(--text-muted); line-height: 1.6; max-width: 280px; }
+
+.loading-box {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 56px 24px;
+  gap: 20px;
+  text-align: center;
+}
+.spinner {
+  width: 36px; height: 36px;
+  border: 2px solid var(--border);
+  border-top-color: var(--navy);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-step {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  letter-spacing: 0.5px;
+}
+.loading-sub { font-size: 12px; color: var(--text-muted); }
+
+.ia-result { display: none; }
+
+.auto-box {
+  background: var(--blue-pale);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--navy);
+  border-radius: 6px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+.auto-box-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.auto-box-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+}
+.auto-box-sub { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.auto-box-desc {
+  font-size: 12px;
+  color: var(--text-mid);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  line-height: 1.6;
+}
+
+.conf-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.conf-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.conf-bar { flex: 1; height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.conf-fill { height: 100%; background: var(--navy); border-radius: 99px; transition: width 0.8s ease; width: 0%; }
+.conf-pct { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: var(--navy); font-weight: 700; }
+
+.piezas-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.piezas-grid { display: flex; flex-direction: column; gap: 6px; }
+.pieza-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  gap: 8px;
+}
+.pieza-row .tag { flex-shrink: 0; }
+.pieza-row:hover { border-color: var(--navy); background: var(--blue-pale); }
+.pieza-row.active { border-color: var(--navy); background: var(--blue-pale); border-left: 3px solid var(--navy); }
+.pieza-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; overflow: hidden; }
+.pieza-icon { font-size: 18px; }
+.pieza-name { font-size: 13px; font-weight: 500; color: var(--text); }
+
+/* ML results */
+.ml-header-bar {
+  background: var(--navy-deep);
+  padding: 13px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px 8px 0 0;
+}
+.ml-header-left {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.ml-query-text { font-size: 11px; color: rgba(255,255,255,0.45); font-family: 'Barlow', sans-serif; text-transform: none; font-weight: 400; letter-spacing: 0; }
+.ml-count-text { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: rgba(255,255,255,0.4); }
+
+.ml-items { display: flex; flex-direction: column; gap: 8px; padding: 14px; }
+
+.ml-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  transition: all 0.15s;
+  animation: fadeUp 0.3s ease both;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+.ml-item:hover { border-color: var(--navy); box-shadow: var(--shadow-sm); transform: translateX(2px); }
+
+.ml-thumb {
+  width: 54px; height: 54px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--off-white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.ml-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.ml-info { flex: 1; min-width: 0; overflow: hidden; }
+.ml-title { font-size: 12px; line-height: 1.4; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+.ml-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ml-price {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--navy);
+}
+.ml-usd { font-size: 10px; color: var(--text-muted); }
+.ml-ship {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  color: var(--success);
+  background: var(--success-bg);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+.ml-seller { font-size: 10px; color: var(--text-muted); }
+.ml-loc { font-size: 10px; color: var(--text-muted); }
+
+.btn-add {
+  background: var(--off-white);
+  border: 1.5px solid var(--border);
+  color: var(--text-mid);
+  border-radius: 5px;
+  padding: 7px 12px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-add:hover { border-color: var(--navy); color: var(--navy); }
+.btn-add.added { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+.ml-loading {
+  display: flex; align-items: center; gap: 12px;
+  padding: 28px 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Cotización sidebar */
+.cot-items { display: flex; flex-direction: column; }
+.cot-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  animation: fadeUp 0.25s ease both;
+}
+.cot-row:last-of-type { border: none; }
+.cot-price {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+  white-space: nowrap;
+}
+.cot-empty { font-size: 12px; color: var(--text-muted); padding: 16px 0; text-align: center; }
+
+.cot-total-box {
+  background: var(--navy-deep);
+  border-radius: 6px;
+  padding: 16px;
+  margin-top: 14px;
+  display: none;
+}
+.cot-total-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 4px;
+}
+.cot-total-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--white);
+}
+.cot-total-usd { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+/* ═══════════════════════════════════════════════
+   VIEW 4 — BACK OFFICE
+═══════════════════════════════════════════════ */
+.bo-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-tab {
+  padding: 7px 16px;
+  border-radius: 4px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-tab:hover { border-color: var(--navy); color: var(--navy); }
+.filter-tab.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+.bo-search {
+  flex: 1;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 5px;
+  padding: 8px 14px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.bo-search:focus { border-color: var(--navy); }
+
+.bo-table-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+}
+
+.exp-detail-panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: none;
+  animation: fadeUp 0.25s ease both;
+}
+.exp-detail-panel.visible { display: block; }
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.detail-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.detail-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.detail-field-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+.detail-field-val { font-size: 13px; font-weight: 500; color: var(--text); }
+
+.items-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 12px;
+}
+.detail-item-price {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.detail-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--navy-deep);
+  border-radius: 6px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+.detail-total-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.detail-total-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.action-row { display: flex; gap: 10px; }
+
+/* ─── ANIMATIONS ─────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── EXP CARD (mobile dashboard list) ── */
+.dash-table-mobile { display: none; }
+.dash-table-desktop { display: block; }
+
+.exp-card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+  gap: 12px;
+  width: 100%;
+}
+.exp-card-row:hover { background: var(--blue-pale); }
+.exp-card-left { flex: 1; min-width: 0; }
+.exp-card-right { flex-shrink: 0; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.exp-card-desc { font-size: 12px; color: var(--text-mid); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.exp-card-tipo { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.exp-card-price { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy); white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .dash-table-desktop { display: none; }
+  .dash-table-mobile { display: block; }
+}
+
+/* ─── RESPONSIVE ─────────────────────────────── */
+
+/* ── NUCLEAR OVERFLOW FIX ──
+   Every element must stay within viewport width.
+   This is the root fix — no element can push beyond 100vw. */
+*, *::before, *::after { box-sizing: border-box; }
+html { overflow-x: hidden; }
+body { overflow-x: hidden; max-width: 100%; }
+.view { overflow-x: hidden; width: 100%; max-width: 100%; }
+.main-area { overflow-x: hidden; width: 100%; max-width: 100%; min-width: 0; }
+.page-content { overflow-x: hidden; width: 100%; max-width: 100%; min-width: 0; }
+.card { width: 100%; max-width: 100%; min-width: 0; }
+
+/* All flex/grid children must shrink */
+.pieza-row, .ml-item, .ml-header-bar, .queue-item,
+.kpi-card, .cot-row, .detail-item, .detail-header,
+.topbar, .topbar-right { min-width: 0; max-width: 100%; }
+
+/* Text truncation inside tight containers */
+.pieza-name, .ml-title, .queue-desc, .exp-num, .ml-query-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* pieza-row must not overflow — button is flex-shrink:0 but row wraps */
+.pieza-row {
+  width: 100%;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+.pieza-left { min-width: 0; flex: 1; overflow: hidden; }
+
+/* ML card full width, no overflow */
+#ml-card { width: 100%; max-width: 100%; overflow: hidden; }
+.ml-header-bar { width: 100%; overflow: hidden; }
+.ml-items { width: 100%; overflow: hidden; }
+.ml-item { width: 100%; max-width: 100%; overflow: hidden; }
+.ml-info { min-width: 0; flex: 1; overflow: hidden; }
+.ml-meta { overflow: hidden; }
+
+/* KPI grid items */
+.kpi-grid { width: 100%; }
+.kpi-card { min-width: 0; overflow: hidden; }
+.kpi-value { overflow: hidden; text-overflow: ellipsis; }
+
+/* Topbar no overflow */
+.topbar { width: 100%; overflow: hidden; }
+.topbar-right { flex-shrink: 0; gap: 8px; }
+
+/* ── TABLET (≤ 900px) ── */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main-area { margin-left: 0; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .dash-grid { grid-template-columns: 1fr; }
+  .analisis-grid { grid-template-columns: 1fr; }
+  .login-left { display: none; }
+  #v-login { flex-direction: column; }
+  .login-right { padding: 32px 20px; }
+  .bo-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .data-table { min-width: 560px; }
+}
+
+/* ── MOBILE (≤ 600px) ── */
+@media (max-width: 600px) {
+  /* Base layout */
+  .page-content { padding: 12px 12px 80px; }
+  .topbar { padding: 0 12px; height: 52px; }
+  .topbar-date { display: none; }
+  .topbar-dolar { font-size: 10px; padding: 3px 7px; white-space: nowrap; }
+  .topbar-title { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topbar-right .btn { display: none; }
+
+  /* KPI */
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .kpi-value { font-size: 22px; }
+  .kpi-card { padding: 12px; }
+  .kpi-sub { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Grids */
+  .dash-grid { grid-template-columns: 1fr; }
+  .analisis-grid { grid-template-columns: 1fr; gap: 12px; }
+  .detail-grid { grid-template-columns: 1fr; }
+
+  /* Dashboard table — card cards only on mobile */
+  .bo-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .data-table { min-width: 480px; }
+  /* Dashboard recent table: hide more columns */
+  .dash-grid .data-table th:nth-child(2),
+  .dash-grid .data-table td:nth-child(2),
+  .dash-grid .data-table th:nth-child(3),
+  .dash-grid .data-table td:nth-child(3),
+  .dash-grid .data-table th:nth-child(4),
+  .dash-grid .data-table td:nth-child(4),
+  .dash-grid .data-table th:nth-child(5),
+  .dash-grid .data-table td:nth-child(5) { display: none; }
+  /* Wrap the dashboard table too */
+  .card .data-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Pieza rows — compress button */
+  .pieza-row { padding: 9px 10px; gap: 6px; }
+  .pieza-left { gap: 8px; }
+  .pieza-icon { font-size: 16px; flex-shrink: 0; }
+  .pieza-name { font-size: 12px; }
+  .btn.btn-primary.btn-sm { padding: 5px 8px; font-size: 10px; white-space: nowrap; flex-shrink: 0; }
+
+  /* ML card */
+  .ml-header-bar { padding: 10px 12px; flex-wrap: wrap; gap: 4px; }
+  .ml-header-left { font-size: 11px; flex-wrap: wrap; gap: 4px; }
+  .ml-query-text { width: 100%; }
+  .ml-items { padding: 10px; gap: 8px; }
+  .ml-item { padding: 10px; gap: 8px; }
+  .ml-thumb { width: 40px; height: 40px; font-size: 16px; flex-shrink: 0; }
+  .ml-price { font-size: 13px; }
+  .ml-usd, .ml-seller, .ml-loc { font-size: 9px; }
+  .btn-add { padding: 6px 8px; font-size: 10px; flex-shrink: 0; }
+
+  /* Drop zone */
+  .drop-zone { aspect-ratio: 3/2; }
+
+  /* Back office filters */
+  .bo-filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; gap: 6px; }
+  .bo-filters::-webkit-scrollbar { display: none; }
+  .filter-tab { flex-shrink: 0; padding: 6px 12px; font-size: 11px; }
+  .bo-search { min-width: 160px; flex-shrink: 1; }
+
+  /* Detail panel */
+  .action-row { flex-direction: column; gap: 8px; }
+  .action-row .btn { width: 100%; justify-content: center; }
+  .detail-header { flex-direction: column; gap: 12px; }
+  .detail-title { font-size: 18px; }
+
+  /* Queue */
+  .queue-item { padding: 10px 12px; }
+  .queue-desc { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+
+  /* Login */
+  .login-right { padding: 28px 16px; }
+  .login-form-title { font-size: 22px; }
+
+  /* Cotización */
+  .cot-total-price { font-size: 22px; }
+}
+
+/* ── BOTTOM NAV (mobile only) ── */
+.bottom-nav { display: none; }
+@media (max-width: 600px) {
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 200;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -2px 12px rgba(0,55,129,0.08);
+    height: 60px;
+  }
+  .bn-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    transition: all 0.15s;
+    padding: 6px 4px;
+    position: relative;
+  }
+  .bn-item.active .bn-icon { color: var(--navy); }
+  .bn-item.active .bn-label { color: var(--navy); font-weight: 600; }
+  .bn-item.active::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 20%; right: 20%;
+    height: 2px;
+    background: var(--navy);
+    border-radius: 0 0 2px 2px;
+  }
+  .bn-icon { font-size: 20px; color: var(--text-muted); transition: color 0.15s; }
+  .bn-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+  .bn-badge {
+    position: absolute;
+    top: 6px; right: calc(50% - 18px);
+    background: var(--danger);
+    color: #fff;
+    font-size: 8px;
+    font-weight: 700;
+    font-family: 'Barlow Condensed', sans-serif;
+    padding: 1px 4px;
+    border-radius: 99px;
+    min-width: 14px;
+    text-align: center;
+  }
+}
+
+/* ── MOBILE HAMBURGER ── */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  flex-direction: column;
+  gap: 4px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+.hamburger span {
+  display: block;
+  width: 20px; height: 2px;
+  background: var(--navy);
+  border-radius: 2px;
+}
+@media (max-width: 600px) {
+  .hamburger { display: flex; }
+}
+
+/* ── DRAWER (mobile sidebar) ── */
+.drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 149;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.drawer-overlay.open { display: block; opacity: 1; }
+.sidebar-drawer {
+  position: fixed;
+  top: 0; left: -260px; bottom: 0;
+  width: 240px;
+  background: var(--navy-deep);
+  z-index: 150;
+  transition: left 0.28s cubic-bezier(0.4,0,0.2,1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+}
+.sidebar-drawer.open { left: 0; }
+.drawer-close {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: rgba(255,255,255,0.7);
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     VIEW 1 — LOGIN
+══════════════════════════════════════════════ -->
+<div id="v-login" class="view active">
+  <div class="login-left">
+    <div class="login-grid"></div>
+    <div class="login-brand">
+      <div class="login-brand-name">Siniestro<span class="brand-dot">.</span>AI</div>
+      <div class="login-brand-tag">Plataforma de Peritaje Digital</div>
+    </div>
+    <div class="login-hero">
+      <div class="login-hero-title">Peritaje inteligente<br>para la industria <em>aseguradora</em></div>
+      <div class="login-hero-desc">Reducción del tiempo de resolución de siniestros mediante visión artificial, cotización en tiempo real y trazabilidad completa del expediente.</div>
+    </div>
+    <div class="login-stats">
+      <div>
+        <div class="login-stat-val">87%</div>
+        <div class="login-stat-label">Reducción<br>tiempo peritaje</div>
+      </div>
+      <div>
+        <div class="login-stat-val">48h</div>
+        <div class="login-stat-label">Resolución<br>promedio</div>
+      </div>
+      <div>
+        <div class="login-stat-val">$0</div>
+        <div class="login-stat-label">Costo por<br>desplazamiento</div>
+      </div>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-form-wrap">
+      <div class="login-form-title">Acceso al sistema</div>
+      <div class="login-form-sub">Ingresá con tus credenciales corporativas</div>
+      <div class="form-field">
+        <label class="form-label">Correo electrónico</label>
+        <input class="form-input" type="email" value="operador@seguros.com.ar" placeholder="usuario@empresa.com">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" value="••••••••" placeholder="••••••••">
+      </div>
+      <button class="btn-login" onclick="navTo('v-operador')">Iniciar sesión</button>
+      <div class="login-footer-note">
+        Acceso restringido a personal autorizado.<br>
+        Ante problemas de acceso, contactá a sistemas.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR (shared) -->
+<template id="sidebar-tpl">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-name">Siniestro<span>.</span>AI</div>
+      <div class="sidebar-brand-tag">Peritaje Digital</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Principal</div>
+      <button class="nav-item" data-nav="v-operador" onclick="navTo('v-operador')">
+        <span class="nav-icon">▦</span> Dashboard
+      </button>
+      <button class="nav-item" data-nav="v-analisis" onclick="navTo('v-analisis')">
+        <span class="nav-icon">◎</span> Nuevo peritaje
+      </button>
+      <div class="nav-section-label">Gestión</div>
+      <button class="nav-item" data-nav="v-backoffice" onclick="navTo('v-backoffice')">
+        <span class="nav-icon">☰</span> Expedientes
+        <span class="nav-badge">3</span>
+      </button>
+      <button class="nav-item" onclick="alert('Módulo en desarrollo')">
+        <span class="nav-icon">◈</span> Reportes
+      </button>
+      <button class="nav-item" onclick="alert('Módulo en desarrollo')">
+        <span class="nav-icon">◇</span> Configuración
+      </button>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar">MG</div>
+      <div>
+        <div class="user-name">Martín González</div>
+        <div class="user-role">Perito Senior</div>
+      </div>
+    </div>
+  </aside>
+</template>
+
+<!-- ══════════════════════════════════════════════
+     VIEW 2 — OPERADOR DASHBOARD
+══════════════════════════════════════════════ -->
+<div id="v-operador" class="view">
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-title">Dashboard <span>/ Inicio</span></div>
+      <div class="topbar-right">
+        <div class="topbar-dolar">USD blue: <strong class="dolar-blue-val" id="dolar-blue-op">$1.298</strong></div>
+        <div class="topbar-date" id="top-date"></div>
+        <button class="btn btn-primary btn-sm" onclick="navTo('v-analisis')">+ Nuevo peritaje</button>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Expedientes hoy</div>
+          <div class="kpi-value">12</div>
+          <div class="kpi-sub kpi-change">↑ +3 vs ayer</div>
+        </div>
+        <div class="kpi-card gold">
+          <div class="kpi-label">En revisión</div>
+          <div class="kpi-value">4</div>
+          <div class="kpi-sub" style="color:var(--warning)">Requieren acción</div>
+        </div>
+        <div class="kpi-card success">
+          <div class="kpi-label">Aprobados mes</div>
+          <div class="kpi-value">87</div>
+          <div class="kpi-sub kpi-change">↑ 94% tasa aprobación</div>
+        </div>
+        <div class="kpi-card warning">
+          <div class="kpi-label">Monto promedio</div>
+          <div class="kpi-value" style="font-size:22px">$384K</div>
+          <div class="kpi-sub" style="color:var(--warning)">ARS por siniestro</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <!-- Recent expedientes -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Expedientes recientes</div>
+            <button class="btn btn-ghost btn-sm" onclick="navTo('v-backoffice')">Ver todos</button>
+          </div>
+          <!-- Desktop table -->
+          <div class="dash-table-desktop" style="overflow-x:auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Expediente</th>
+                <th>Tipo</th>
+                <th>Asegurado</th>
+                <th>Monto</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr onclick="navTo('v-backoffice');openDetail(0)">
+                <td><div class="exp-num">SIN-2025-00441</div><div class="exp-auto">VW Gol Trend 2021</div></td>
+                <td>Choque frontal</td><td>Carlos Méndez</td>
+                <td><span style="font-family:'Barlow Condensed';font-weight:700;color:var(--navy)">$647.800</span></td>
+                <td><span class="tag tag-review">En revisión</span></td>
+              </tr>
+              <tr onclick="navTo('v-backoffice');openDetail(1)">
+                <td><div class="exp-num">SIN-2025-00440</div><div class="exp-auto">Toyota Corolla 2022</div></td>
+                <td>Granizo</td><td>Ana Rodríguez</td>
+                <td><span style="font-family:'Barlow Condensed';font-weight:700;color:var(--navy)">$1.243.000</span></td>
+                <td><span class="tag tag-approved">Aprobado</span></td>
+              </tr>
+              <tr onclick="navTo('v-backoffice');openDetail(2)">
+                <td><div class="exp-num">SIN-2025-00439</div><div class="exp-auto">Chevrolet Onix 2023</div></td>
+                <td>Robo parcial</td><td>Pedro Sánchez</td>
+                <td><span style="font-family:'Barlow Condensed';font-weight:700;color:var(--navy)">$198.500</span></td>
+                <td><span class="tag tag-pending">Pendiente</span></td>
+              </tr>
+              <tr onclick="navTo('v-backoffice')">
+                <td><div class="exp-num">SIN-2025-00438</div><div class="exp-auto">Ford Ka 2020</div></td>
+                <td>Raspón lateral</td><td>Laura Giménez</td>
+                <td><span style="font-family:'Barlow Condensed';font-weight:700;color:var(--navy)">$87.300</span></td>
+                <td><span class="tag tag-approved">Aprobado</span></td>
+              </tr>
+              <tr onclick="navTo('v-backoffice')">
+                <td><div class="exp-num">SIN-2025-00437</div><div class="exp-auto">Renault Sandero 2021</div></td>
+                <td>Choque trasero</td><td>Martín López</td>
+                <td><span style="font-family:'Barlow Condensed';font-weight:700;color:var(--navy)">$412.000</span></td>
+                <td><span class="tag tag-rejected">Rechazado</span></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <!-- Mobile card list -->
+          <div class="dash-table-mobile">
+            <div class="exp-card-row" onclick="navTo('v-backoffice');openDetail(0)">
+              <div class="exp-card-left">
+                <div class="exp-num">SIN-2025-00441</div>
+                <div class="exp-card-desc">VW Gol Trend 2021 · Carlos Méndez</div>
+                <div class="exp-card-tipo">Choque frontal</div>
+              </div>
+              <div class="exp-card-right">
+                <div class="exp-card-price">$647.800</div>
+                <span class="tag tag-review">En revisión</span>
+              </div>
+            </div>
+            <div class="exp-card-row" onclick="navTo('v-backoffice');openDetail(1)">
+              <div class="exp-card-left">
+                <div class="exp-num">SIN-2025-00440</div>
+                <div class="exp-card-desc">Toyota Corolla 2022 · Ana Rodríguez</div>
+                <div class="exp-card-tipo">Granizo</div>
+              </div>
+              <div class="exp-card-right">
+                <div class="exp-card-price">$1.243.000</div>
+                <span class="tag tag-approved">Aprobado</span>
+              </div>
+            </div>
+            <div class="exp-card-row" onclick="navTo('v-backoffice');openDetail(2)">
+              <div class="exp-card-left">
+                <div class="exp-num">SIN-2025-00439</div>
+                <div class="exp-card-desc">Chevrolet Onix 2023 · Pedro Sánchez</div>
+                <div class="exp-card-tipo">Robo parcial</div>
+              </div>
+              <div class="exp-card-right">
+                <div class="exp-card-price">$198.500</div>
+                <span class="tag tag-pending">Pendiente</span>
+              </div>
+            </div>
+            <div class="exp-card-row" onclick="navTo('v-backoffice')">
+              <div class="exp-card-left">
+                <div class="exp-num">SIN-2025-00438</div>
+                <div class="exp-card-desc">Ford Ka 2020 · Laura Giménez</div>
+                <div class="exp-card-tipo">Raspón lateral</div>
+              </div>
+              <div class="exp-card-right">
+                <div class="exp-card-price">$87.300</div>
+                <span class="tag tag-approved">Aprobado</span>
+              </div>
+            </div>
+            <div class="exp-card-row" onclick="navTo('v-backoffice')" style="border-bottom:none">
+              <div class="exp-card-left">
+                <div class="exp-num">SIN-2025-00437</div>
+                <div class="exp-card-desc">Renault Sandero 2021 · Martín López</div>
+                <div class="exp-card-tipo">Choque trasero</div>
+              </div>
+              <div class="exp-card-right">
+                <div class="exp-card-price">$412.000</div>
+                <span class="tag tag-rejected">Rechazado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Queue -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Cola de atención</div>
+            <span class="tag tag-review">4 activos</span>
+          </div>
+          <div class="card-body">
+            <div class="queue-list">
+              <div class="queue-item urgent" onclick="navTo('v-analisis')">
+                <div class="queue-dot" style="background:var(--danger)"></div>
+                <div class="queue-info">
+                  <div class="queue-num">SIN-2025-00441</div>
+                  <div class="queue-desc">Choque frontal · VW Gol Trend · Méndez</div>
+                </div>
+                <div class="queue-time">hace 12 min</div>
+              </div>
+              <div class="queue-item" onclick="navTo('v-analisis')">
+                <div class="queue-dot" style="background:var(--warning)"></div>
+                <div class="queue-info">
+                  <div class="queue-num">SIN-2025-00439</div>
+                  <div class="queue-desc">Robo parcial · Onix · Sánchez</div>
+                </div>
+                <div class="queue-time">hace 38 min</div>
+              </div>
+              <div class="queue-item" onclick="navTo('v-analisis')">
+                <div class="queue-dot" style="background:var(--navy)"></div>
+                <div class="queue-info">
+                  <div class="queue-num">SIN-2025-00436</div>
+                  <div class="queue-desc">Granizo · Amarok · Fernández</div>
+                </div>
+                <div class="queue-time">hace 1h 14m</div>
+              </div>
+              <div class="queue-item" onclick="navTo('v-analisis')">
+                <div class="queue-dot" style="background:var(--text-muted)"></div>
+                <div class="queue-info">
+                  <div class="queue-num">SIN-2025-00435</div>
+                  <div class="queue-desc">Incendio parcial · Kangoo · Torres</div>
+                </div>
+                <div class="queue-time">hace 2h 5m</div>
+              </div>
+            </div>
+            <div style="margin-top:14px">
+              <button class="btn btn-outline btn-full" onclick="navTo('v-analisis')">Iniciar peritaje</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     VIEW 3 — ANÁLISIS IA + ML
+══════════════════════════════════════════════ -->
+<div id="v-analisis" class="view">
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-title">Nuevo peritaje <span>/ Análisis IA + Cotización</span></div>
+      <div class="topbar-right">
+        <div class="topbar-dolar">USD blue: <strong class="dolar-blue-val">$1.298</strong></div>
+        <button class="btn btn-ghost btn-sm" onclick="navTo('v-operador')">← Volver</button>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="analisis-grid">
+
+        <!-- LEFT -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+
+          <!-- Upload -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Imagen del siniestro</div>
+              <span id="img-status-tag" style="font-size:11px;color:var(--text-muted)">Sin imagen</span>
+            </div>
+            <div class="card-body">
+              <label for="file-in">
+                <div class="drop-zone" id="drop-zone">
+                  <img id="preview" alt="">
+                  <div class="drop-overlay"><div class="drop-overlay-text" id="overlay-text"></div></div>
+                  <div class="drop-ph">
+                    <div class="drop-icon">📷</div>
+                    <div class="drop-ph-title">Cargar imagen del daño</div>
+                    <div class="drop-ph-sub">La IA identifica el vehículo y las piezas dañadas de forma automática</div>
+                  </div>
+                </div>
+              </label>
+              <input type="file" id="file-in" accept="image/*" onchange="handleFile(event)">
+              <div style="font-family:'Barlow Condensed';font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Escenarios de demostración</div>
+              <div class="demo-row">
+                <button class="demo-btn" onclick="loadDemo('choque')"><span class="di">🚗</span>Choque frontal</button>
+                <button class="demo-btn" onclick="loadDemo('granizo')"><span class="di">🌨</span>Granizo</button>
+                <button class="demo-btn" onclick="loadDemo('espejo')"><span class="di">🪞</span>Espejo roto</button>
+                <button class="demo-btn" onclick="loadDemo('lateral')"><span class="di">🚘</span>Raspón lateral</button>
+              </div>
+              <button class="btn btn-primary btn-full" id="btn-analizar" onclick="analizar()" disabled>
+                Analizar con IA + Buscar en MercadoLibre
+              </button>
+            </div>
+          </div>
+
+          <!-- Cotización -->
+          <div class="card" id="cot-card">
+            <div class="card-head">
+              <div class="card-title">Cotización</div>
+              <span class="tag tag-review" id="cot-tag" style="display:none">Precios ML</span>
+            </div>
+            <div class="card-body">
+              <div class="cot-items" id="cot-items">
+                <div class="cot-empty">Agregue ítems desde MercadoLibre</div>
+              </div>
+              <div class="cot-total-box" id="cot-total-box">
+                <div class="cot-total-label">Total estimado del siniestro</div>
+                <div class="cot-total-price" id="cot-total-price">$0</div>
+                <div class="cot-total-usd" id="cot-total-usd">≈ USD 0</div>
+              </div>
+              <button class="btn btn-primary btn-full" id="btn-guardar" style="display:none;margin-top:12px" onclick="guardarExpediente()">
+                Guardar expediente
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+
+          <!-- IA Result -->
+          <div class="card" id="ia-card">
+            <div class="card-head">
+              <div class="card-title">Análisis — Claude Vision IA</div>
+              <span class="tag tag-approved" id="ia-done-tag" style="display:none">✓ Completado</span>
+            </div>
+            <div id="ia-body">
+              <div class="empty-state">
+                <div class="empty-icon">◎</div>
+                <div class="empty-title">Sin análisis</div>
+                <div class="empty-sub">Cargue una imagen o seleccione un escenario de demostración para iniciar el análisis de IA</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ML Results -->
+          <div id="ml-card" style="background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;box-shadow:var(--shadow-sm);display:none">
+            <div class="ml-header-bar">
+              <div class="ml-header-left">
+                MercadoLibre Argentina
+                <div class="ml-query-text" id="ml-query-text"></div>
+              </div>
+              <div class="ml-count-text" id="ml-count-text"></div>
+            </div>
+            <div id="ml-body">
+              <div class="ml-loading">
+                <div class="spinner" style="width:20px;height:20px;border-width:2px"></div>
+                Buscando precios en MercadoLibre...
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     VIEW 4 — BACK OFFICE
+══════════════════════════════════════════════ -->
+<div id="v-backoffice" class="view">
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-title">Expedientes <span>/ Gestión</span></div>
+      <div class="topbar-right">
+        <button class="btn btn-primary btn-sm" onclick="navTo('v-analisis')">+ Nuevo peritaje</button>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <div class="bo-filters">
+        <button class="filter-tab active" onclick="filterBO(this,'todos')">Todos <span style="opacity:.6">(12)</span></button>
+        <button class="filter-tab" onclick="filterBO(this,'pendiente')">Pendientes <span style="opacity:.6">(3)</span></button>
+        <button class="filter-tab" onclick="filterBO(this,'revision')">En revisión <span style="opacity:.6">(4)</span></button>
+        <button class="filter-tab" onclick="filterBO(this,'aprobado')">Aprobados <span style="opacity:.6">(4)</span></button>
+        <button class="filter-tab" onclick="filterBO(this,'rechazado')">Rechazados <span style="opacity:.6">(1)</span></button>
+        <input class="bo-search" placeholder="Buscar por número, patente, asegurado..." style="max-width:280px">
+      </div>
+
+      <div class="bo-table-wrap">
+        <table class="data-table" id="bo-table">
+          <thead>
+            <tr>
+              <th>N° Expediente</th>
+              <th>Fecha</th>
+              <th>Asegurado</th>
+              <th>Vehículo</th>
+              <th>Tipo</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="bo-tbody">
+            <!-- populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Detail panel -->
+      <div class="exp-detail-panel" id="detail-panel">
+        <div class="detail-header">
+          <div>
+            <div class="detail-num" id="d-num"></div>
+            <div class="detail-title" id="d-title"></div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="tag" id="d-tag"></span>
+            <button class="btn btn-ghost btn-sm" onclick="closeDetail()">✕ Cerrar</button>
+          </div>
+        </div>
+
+        <div class="detail-grid">
+          <div><div class="detail-field-label">Asegurado</div><div class="detail-field-val" id="d-asegurado"></div></div>
+          <div><div class="detail-field-label">Póliza</div><div class="detail-field-val" id="d-poliza"></div></div>
+          <div><div class="detail-field-label">Patente</div><div class="detail-field-val" id="d-patente"></div></div>
+          <div><div class="detail-field-label">Vehículo detectado</div><div class="detail-field-val" id="d-auto"></div></div>
+          <div><div class="detail-field-label">Tipo siniestro</div><div class="detail-field-val" id="d-tipo"></div></div>
+          <div><div class="detail-field-label">Confianza IA</div><div class="detail-field-val" id="d-conf"></div></div>
+        </div>
+
+        <div style="font-family:'Barlow Condensed';font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px">Ítems cotizados</div>
+        <div class="items-list" id="d-items"></div>
+
+        <div class="detail-total">
+          <div><div class="detail-total-label">Total del siniestro</div></div>
+          <div class="detail-total-val" id="d-total"></div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn btn-primary" onclick="cambiarEstado('aprobado')">✓ Aprobar expediente</button>
+          <button class="btn btn-ghost" onclick="cambiarEstado('rechazado')">✕ Rechazar</button>
+          <button class="btn btn-ghost" onclick="alert('Informe generado en PDF')">↓ Exportar PDF</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ───────────────────────────────────────────────────
+const EXPEDIENTES = [
+  { num:'SIN-2025-00441', fecha:'21/03/2025', asegurado:'Carlos Méndez', poliza:'ART-2024-88421', patente:'AD 312 LK', auto:'VW Gol Trend 2021', tipo:'Choque frontal', total:647800, estado:'revision', conf:91,
+    items:[
+      { pieza:'Paragolpes delantero completo', precio:284000 },
+      { pieza:'Faro delantero izquierdo LED', precio:176500 },
+      { pieza:'Capot con bisagras', precio:187300 },
+    ]
+  },
+  { num:'SIN-2025-00440', fecha:'20/03/2025', asegurado:'Ana Rodríguez', poliza:'ART-2023-44102', patente:'BE 881 XP', auto:'Toyota Corolla 2022', tipo:'Granizo', total:1243000, estado:'aprobado', conf:88,
+    items:[
+      { pieza:'Capot Toyota Corolla 2022', precio:420000 },
+      { pieza:'Techo chapa + mano de obra', precio:580000 },
+      { pieza:'Parabrisas Sekurit', precio:243000 },
+    ]
+  },
+  { num:'SIN-2025-00439', fecha:'20/03/2025', asegurado:'Pedro Sánchez', poliza:'ART-2024-12089', patente:'CF 445 JR', auto:'Chevrolet Onix 2023', tipo:'Robo parcial', total:198500, estado:'pendiente', conf:95,
+    items:[
+      { pieza:'Espejo retrovisor izq. eléctrico', precio:87500 },
+      { pieza:'Luneta trasera + instalación', precio:111000 },
+    ]
+  },
+  { num:'SIN-2025-00438', fecha:'19/03/2025', asegurado:'Laura Giménez', poliza:'ART-2022-77341', patente:'DH 209 ZK', auto:'Ford Ka 2020', tipo:'Raspón lateral', total:87300, estado:'aprobado', conf:84,
+    items:[
+      { pieza:'Puerta delantera izq.', precio:52000 },
+      { pieza:'Moldura + manija', precio:35300 },
+    ]
+  },
+  { num:'SIN-2025-00437', fecha:'19/03/2025', asegurado:'Martín López', poliza:'ART-2023-55810', patente:'EK 774 MN', auto:'Renault Sandero 2021', tipo:'Choque trasero', total:412000, estado:'rechazado', conf:78,
+    items:[
+      { pieza:'Paragolpes trasero', precio:210000 },
+      { pieza:'Portón trasero', precio:202000 },
+    ]
+  },
+];
+
+const DEMOS = {
+  choque: { label:'Choque frontal · VW Gol Trend 2021', emoji:'🚗',
+    result:{ auto:'Volkswagen Gol Trend', año:'2019–2023', color:'Gris', confianza:91,
+      descripcion:'Choque frontal moderado. Daño estructural en paragolpes, deformación en capot y faro izquierdo comprometido.',
+      piezas:[
+        { nombre:'Paragolpes delantero', icono:'🔲', severidad:'alto', query:'paragolpes delantero VW Gol Trend' },
+        { nombre:'Faro delantero izquierdo', icono:'💡', severidad:'alto', query:'faro delantero VW Gol Trend' },
+        { nombre:'Capot completo', icono:'🔲', severidad:'medio', query:'capot VW Gol Trend' },
+        { nombre:'Guardabarro derecho', icono:'🛡', severidad:'bajo', query:'guardabarro VW Gol Trend' },
+      ]}
+  },
+  granizo: { label:'Granizo · Toyota Corolla 2022', emoji:'🌨',
+    result:{ auto:'Toyota Corolla', año:'2020–2023', color:'Blanco perla', confianza:87,
+      descripcion:'Daños extensivos por granizo. Abolladuras múltiples en capot, techo y parabrisas con impactos visibles.',
+      piezas:[
+        { nombre:'Capot abollado', icono:'🔲', severidad:'alto', query:'capot Toyota Corolla' },
+        { nombre:'Techo chapa', icono:'🏠', severidad:'alto', query:'techo chapa Toyota Corolla' },
+        { nombre:'Parabrisas', icono:'🪟', severidad:'medio', query:'parabrisas Toyota Corolla' },
+        { nombre:'Espejo retrovisor', icono:'🔲', severidad:'bajo', query:'espejo retrovisor Toyota Corolla' },
+      ]}
+  },
+  espejo: { label:'Espejo roto · Chevrolet Onix', emoji:'🪞',
+    result:{ auto:'Chevrolet Onix', año:'2020–2024', color:'Rojo', confianza:95,
+      descripcion:'Espejo retrovisor izquierdo destruido por impacto lateral. Carcasa y vidrio comprometidos.',
+      piezas:[
+        { nombre:'Espejo retrovisor izq.', icono:'🔲', severidad:'alto', query:'espejo retrovisor Chevrolet Onix' },
+        { nombre:'Carcasa espejo', icono:'🛡', severidad:'medio', query:'carcasa espejo Onix' },
+        { nombre:'Vidrio espejo', icono:'🪟', severidad:'medio', query:'vidrio espejo Onix' },
+      ]}
+  },
+  lateral: { label:'Raspón lateral · Ford Ka', emoji:'🚘',
+    result:{ auto:'Ford Ka', año:'2018–2022', color:'Azul', confianza:84,
+      descripcion:'Impacto lateral en puerta delantera izquierda. Daño en moldura de protección y manija exterior.',
+      piezas:[
+        { nombre:'Puerta delantera izq.', icono:'🚪', severidad:'alto', query:'puerta delantera Ford Ka' },
+        { nombre:'Moldura lateral', icono:'🛡', severidad:'medio', query:'moldura lateral Ford Ka' },
+        { nombre:'Manija exterior', icono:'🔲', severidad:'bajo', query:'manija puerta Ford Ka' },
+      ]}
+  },
+};
+
+const ML_DATA = {
+  'paragolpes delantero vw gol trend': [
+    { titulo:'Paragolpes Delantero VW Gol Trend 2019-2023 Original', precio:284000, vendedor:'RepuestosVW_AR', envio:true, loc:'Buenos Aires' },
+    { titulo:'Paragolpes Gol Trend compatible c/ cromado incluido', precio:198000, vendedor:'AutopartesNorte', envio:false, loc:'Córdoba' },
+    { titulo:'Paragolpes Gol Trend pintado gris oscuro metalizado', precio:235000, vendedor:'TallerLópez', envio:true, loc:'Rosario' },
+  ],
+  'faro delantero vw gol trend': [
+    { titulo:'Faro Delantero Izquierdo VW Gol Trend LED Original', precio:176500, vendedor:'LuminariasAR', envio:true, loc:'Buenos Aires' },
+    { titulo:'Óptica Faro Izq Gol Trend Depo Compatible c/garantía', precio:98000, vendedor:'AutoluzBA', envio:true, loc:'GBA' },
+    { titulo:'Faro Gol Trend par delantero izq+der originales', precio:310000, vendedor:'RepuestosOfiVW', envio:false, loc:'CABA' },
+  ],
+  'capot vw gol trend': [
+    { titulo:'Capot VW Gol Trend 2019-2023 c/ bisagras original', precio:198000, vendedor:'CarroceriaGBA', envio:false, loc:'GBA' },
+    { titulo:'Capot compatible Gol Trend sin pintar calidad A', precio:145000, vendedor:'ChapaPinturaSA', envio:true, loc:'La Plata' },
+  ],
+  'guardabarro vw gol trend': [
+    { titulo:'Guardabarro Delantero Derecho VW Gol Trend Original', precio:89300, vendedor:'RepuestosVW_AR', envio:true, loc:'Buenos Aires' },
+    { titulo:'Guardabarro Gol Trend Compatible der. sin pintar', precio:62000, vendedor:'TallerMendez', envio:true, loc:'Mendoza' },
+  ],
+  'capot toyota corolla': [
+    { titulo:'Capot Toyota Corolla 2019-2023 Original importado', precio:420000, vendedor:'ToyotaPartsAR', envio:false, loc:'Buenos Aires' },
+    { titulo:'Capot Corolla compatible c/bisagras excelente calidad', precio:285000, vendedor:'CarroceriaZona', envio:true, loc:'Rosario' },
+  ],
+  'parabrisas toyota corolla': [
+    { titulo:'Parabrisas Toyota Corolla 2020+ Sekurit Original', precio:195000, vendedor:'VidriomotorAR', envio:false, loc:'CABA' },
+    { titulo:'Parabrisas Corolla AGC compatible, instalación incluida', precio:148000, vendedor:'GlassCarBA', envio:true, loc:'GBA' },
+  ],
+  'techo chapa toyota corolla': [
+    { titulo:'Techo chapa Toyota Corolla 2019-2023 original import', precio:380000, vendedor:'CarroceriaImport', envio:false, loc:'Buenos Aires' },
+  ],
+  'espejo retrovisor toyota corolla': [
+    { titulo:'Espejo Retrovisor Izq. Toyota Corolla eléctrico c/luz', precio:95000, vendedor:'ToyotaPartsAR', envio:true, loc:'CABA' },
+    { titulo:'Espejo lateral Corolla compatible abatible eléctrico', precio:68000, vendedor:'AutopartesNorte', envio:true, loc:'Córdoba' },
+  ],
+  'espejo retrovisor chevrolet onix': [
+    { titulo:'Espejo Retrovisor Izq. Onix 2020+ eléctrico c/señal', precio:87500, vendedor:'GMPartsAR', envio:true, loc:'Buenos Aires' },
+    { titulo:'Espejo lateral Onix abatible eléctrico compatible', precio:61000, vendedor:'ReflexAutoAR', envio:false, loc:'CABA' },
+  ],
+  'carcasa espejo onix': [
+    { titulo:'Carcasa espejo Onix izquierda negra mate original', precio:18500, vendedor:'PlasticosAuto', envio:true, loc:'GBA' },
+  ],
+  'vidrio espejo onix': [
+    { titulo:'Vidrio espejo retrovisor Onix izq. curvo c/adhesivo', precio:12000, vendedor:'VidriomotorAR', envio:true, loc:'Rosario' },
+  ],
+  'puerta delantera ford ka': [
+    { titulo:'Puerta Delantera Izquierda Ford Ka 2018-2022', precio:145000, vendedor:'FordRepuestosBA', envio:false, loc:'CABA' },
+    { titulo:'Puerta Ka delantera izq. original desmontada sin daños', precio:118000, vendedor:'DesarmaduraNorte', envio:false, loc:'GBA' },
+  ],
+  'moldura lateral ford ka': [
+    { titulo:'Moldura lateral Ford Ka 2018+ izq. negra original', precio:28000, vendedor:'PlasticosAuto', envio:true, loc:'Buenos Aires' },
+  ],
+  'manija puerta ford ka': [
+    { titulo:'Manija exterior puerta delantera Ford Ka cromada', precio:14500, vendedor:'ManijasAR', envio:true, loc:'CABA' },
+  ],
+};
+
+// ── STATE ──────────────────────────────────────────────────
+let currentB64 = null;
+let currentMime = 'image/jpeg';
+let demoMode = null;
+let cotItems = [];
+let cotTotal = 0;
+let dolarBlue = 1298;
+let activeDetailIdx = null;
+
+// ── NAVIGATION (base — overridden later with mobile support) ─
+function navTo(viewId) {
+  // This gets overridden below with mobile-aware version
+  _navToBase(viewId);
+}
+function _navToBase(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const view = document.getElementById(viewId);
+  view.classList.add('active');
+  if (viewId !== 'v-login') {
+    view.querySelectorAll('.sidebar').forEach(s => s.remove());
+    const tpl = document.getElementById('sidebar-tpl');
+    const sidebar = tpl.content.cloneNode(true);
+    view.prepend(sidebar);
+    view.querySelectorAll('.nav-item').forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.dataset.nav === viewId) btn.classList.add('active');
+    });
+    document.getElementById('bottom-nav').style.display = '';
+    document.querySelectorAll('.bn-item').forEach(b => b.classList.toggle('active', b.dataset.view === viewId));
+    const topbar = view.querySelector('.topbar');
+    if (topbar && !topbar.querySelector('.hamburger')) {
+      const hbtn = document.createElement('button');
+      hbtn.className = 'hamburger';
+      hbtn.setAttribute('aria-label', 'Menú');
+      hbtn.innerHTML = '<span></span><span></span><span></span>';
+      hbtn.onclick = () => document.getElementById('sidebar-drawer').classList.add('open') || document.getElementById('drawer-overlay').classList.add('open') || (document.body.style.overflow='hidden');
+      topbar.prepend(hbtn);
+    }
+  } else {
+    document.getElementById('bottom-nav').style.display = 'none';
+  }
+  const dateEl = document.getElementById('top-date');
+  if (dateEl) dateEl.textContent = new Date().toLocaleDateString('es-AR', { weekday:'short', day:'numeric', month:'short' });
+  window.scrollTo(0, 0);
+}
+
+// ── FILE UPLOAD ─────────────────────────────────────────────
+function handleFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  currentMime = file.type;
+  demoMode = null;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    currentB64 = ev.target.result.split(',')[1];
+    showPreview(ev.target.result, file.name);
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadDemo(key) {
+  demoMode = key;
+  currentB64 = null;
+  const d = DEMOS[key];
+  const cv = document.createElement('canvas');
+  cv.width = 480; cv.height = 360;
+  const ctx = cv.getContext('2d');
+  // Gradient background
+  const gr = ctx.createLinearGradient(0,0,480,360);
+  gr.addColorStop(0, '#001a3a');
+  gr.addColorStop(1, '#003781');
+  ctx.fillStyle = gr;
+  ctx.fillRect(0,0,480,360);
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  for (let x=0;x<480;x+=40) { ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,360);ctx.stroke(); }
+  for (let y=0;y<360;y+=40) { ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(480,y);ctx.stroke(); }
+  // Emoji
+  ctx.font = '90px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(d.emoji, 240, 200);
+  // Label
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.font = '500 14px Barlow, sans-serif';
+  ctx.fillText(d.label, 240, 300);
+  const dataUrl = cv.toDataURL();
+  currentB64 = dataUrl.split(',')[1];
+  currentMime = 'image/png';
+  showPreview(dataUrl, d.label);
+  resetResults();
+}
+
+function showPreview(src, name) {
+  const dz = document.getElementById('drop-zone');
+  document.getElementById('preview').src = src;
+  dz.classList.add('filled');
+  document.getElementById('overlay-text').textContent = name;
+  const tag = document.getElementById('img-status-tag');
+  tag.textContent = 'Lista ✓';
+  tag.style.color = 'var(--success)';
+  document.getElementById('btn-analizar').disabled = false;
+  resetResults();
+}
+
+function resetResults() {
+  document.getElementById('ia-body').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">◎</div>
+      <div class="empty-title">Listo para analizar</div>
+      <div class="empty-sub">Presione "Analizar con IA" para detectar el vehículo y las piezas dañadas</div>
+    </div>`;
+  document.getElementById('ia-done-tag').style.display = 'none';
+  document.getElementById('ml-card').style.display = 'none';
+  cotItems = []; cotTotal = 0;
+  renderCot();
+}
+
+// ── ANALYSIS ───────────────────────────────────────────────
+async function analizar() {
+  if (!currentB64) return;
+  const btn = document.getElementById('btn-analizar');
+  btn.disabled = true;
+  btn.textContent = 'Procesando...';
+  showLoadingIA('Inicializando análisis...');
+
+  try {
+    let result;
+    if (demoMode) {
+      const steps = ['Detectando modelo de vehículo...','Identificando piezas dañadas...','Estimando severidad de daños...','Generando informe...'];
+      for (const s of steps) { setStepIA(s); await sleep(550); }
+      result = DEMOS[demoMode].result;
+    } else {
+      const stepArr = ['Enviando imagen a Claude Vision...','Detectando modelo de vehículo...','Identificando piezas dañadas...'];
+      let si = 0;
+      const iv = setInterval(() => { if(si<stepArr.length) setStepIA(stepArr[si++]); }, 1400);
+      const r = await fetch('/api/analizar', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ base64: currentB64, mediaType: currentMime })
+      });
+      clearInterval(iv);
+      if (!r.ok) { const e = await r.json(); throw new Error(e.error); }
+      result = await r.json();
+    }
+    showAnalysis(result);
+  } catch (err) {
+    document.getElementById('ia-body').innerHTML = `
+      <div style="padding:20px">
+        <div style="background:var(--danger-bg);border:1px solid rgba(181,0,34,0.2);border-left:3px solid var(--danger);border-radius:5px;padding:14px 16px;font-size:13px;color:var(--danger);line-height:1.6">
+          <strong>Error en el análisis:</strong> ${err.message}<br>
+          <span style="color:var(--text-muted);font-size:11px;margin-top:4px;display:block">Utilice los escenarios de demostración para probar sin conexión al servidor.</span>
+        </div>
+      </div>`;
+  }
+  btn.disabled = false;
+  btn.textContent = 'Analizar con IA + Buscar en MercadoLibre';
+}
+
+function showLoadingIA(step) {
+  document.getElementById('ia-body').innerHTML = `
+    <div class="loading-box" style="display:flex">
+      <div class="spinner"></div>
+      <div class="loading-step" id="ls">${step}</div>
+      <div class="loading-sub">La IA está procesando la imagen del siniestro</div>
+    </div>`;
+}
+function setStepIA(s) { const el=document.getElementById('ls'); if(el) el.textContent=s; }
+
+function showAnalysis(r) {
+  document.getElementById('ia-done-tag').style.display = 'flex';
+  document.getElementById('ia-body').innerHTML = `
+    <div style="padding:20px">
+      <div class="auto-box">
+        <div class="auto-box-label">Vehículo identificado</div>
+        <div class="auto-box-name">${r.auto}</div>
+        <div class="auto-box-sub">${r.año}${r.color ? ' · ' + r.color : ''}</div>
+        ${r.descripcion ? `<div class="auto-box-desc">${r.descripcion}</div>` : ''}
+        <div class="conf-row">
+          <span class="conf-label">Confianza</span>
+          <div class="conf-bar"><div class="conf-fill" id="cf" style="width:0%"></div></div>
+          <span class="conf-pct">${r.confianza}%</span>
+        </div>
+      </div>
+      <div class="piezas-title">Piezas con daño detectado — Seleccione para buscar en MercadoLibre</div>
+      <div class="piezas-grid">
+        ${r.piezas.map((p,i) => `
+          <div class="pieza-row" id="pr${i}" style="animation-delay:${i*0.06}s" onclick="buscarML('${esc(p.query)}',${i})">
+            <div class="pieza-left">
+              <span class="pieza-icon">${p.icono}</span>
+              <div>
+                <div class="pieza-name">${p.nombre}</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto;padding-left:6px">
+              <span class="tag tag-${p.severidad}">${p.severidad.charAt(0).toUpperCase()+p.severidad.slice(1)}</span>
+              <button class="btn btn-primary btn-sm" style="flex-shrink:0;white-space:nowrap" onclick="event.stopPropagation();buscarML('${esc(p.query)}',${i})">Buscar ML</button>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  setTimeout(() => { const cf=document.getElementById('cf'); if(cf) cf.style.width = r.confianza+'%'; }, 100);
+}
+
+// ── ML SEARCH ──────────────────────────────────────────────
+async function buscarML(query, idx) {
+  document.querySelectorAll('.pieza-row').forEach(r => r.classList.remove('active'));
+  document.getElementById('pr'+idx)?.classList.add('active');
+
+  const mlCard = document.getElementById('ml-card');
+  mlCard.style.display = 'block';
+  document.getElementById('ml-query-text').textContent = `"${query}"`;
+  document.getElementById('ml-count-text').textContent = '';
+  document.getElementById('ml-body').innerHTML = `
+    <div class="ml-loading">
+      <div class="spinner" style="width:18px;height:18px;border-width:2px"></div>
+      Consultando MercadoLibre Argentina...
+    </div>`;
+  mlCard.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+  try {
+    const r = await fetch(`/api/ml?q=${encodeURIComponent(query)}&limit=5`);
+    const data = await r.json();
+
+    // Update dolar if API returned it
+    if (data.dolar_blue) dolarBlue = data.dolar_blue;
+
+    const items = data.items || [];
+    if (!items.length) {
+      document.getElementById('ml-body').innerHTML =
+        `<div style="padding:16px;font-size:12px;color:var(--text-muted)">Sin resultados para "${query}". Probá una búsqueda más general.</div>`;
+      document.getElementById('ml-count-text').textContent = '0 resultados';
+      return;
+    }
+
+    document.getElementById('ml-count-text').textContent = `${(data.total||items.length).toLocaleString()} resultados`;
+    document.getElementById('ml-body').innerHTML = `
+      <div class="ml-items">
+        ${items.map((item,i) => `
+          <div class="ml-item" style="animation-delay:${i*0.06}s">
+            <div class="ml-thumb">
+              ${item.thumbnail
+                ? `<img src="${item.thumbnail}" alt="" onerror="this.style.display='none';this.parentNode.textContent='🔲'">`
+                : getEmoji(query)}
+            </div>
+            <div class="ml-info">
+              <div class="ml-title" title="${esc(item.titulo)}">${item.titulo}</div>
+              <div class="ml-meta">
+                <span class="ml-price">$${item.precio.toLocaleString('es-AR')}</span>
+                <span class="ml-usd">≈ USD ${item.precio_usd}</span>
+                ${item.envio_gratis ? '<span class="ml-ship">Envío gratis</span>' : ''}
+              </div>
+              <div class="ml-meta" style="margin-top:3px">
+                <span class="ml-seller">🏪 ${item.vendedor}</span>
+                ${item.ubicacion ? `<span class="ml-loc">📍 ${item.ubicacion}</span>` : ''}
+              </div>
+            </div>
+            <button class="btn-add" id="add-${idx}-${i}"
+              onclick="agregarCot(${item.precio},'${esc(item.titulo.substring(0,45))}',${idx},${i})">
+              Agregar
+            </button>
+          </div>`).join('')}
+      </div>`;
+  } catch(err) {
+    // Fallback to mock data if API fails (useful for local dev)
+    console.warn('[ML] API falló, usando datos de demo:', err.message);
+    const items = getMLItems(query);
+    document.getElementById('ml-count-text').textContent = `${items.length} resultados (demo)`;
+    document.getElementById('ml-body').innerHTML = `
+      <div class="ml-items">
+        ${items.map((item,i) => `
+          <div class="ml-item" style="animation-delay:${i*0.06}s">
+            <div class="ml-thumb">${item.emoji || getEmoji(query)}</div>
+            <div class="ml-info">
+              <div class="ml-title" title="${esc(item.titulo)}">${item.titulo}</div>
+              <div class="ml-meta">
+                <span class="ml-price">$${item.precio.toLocaleString('es-AR')}</span>
+                <span class="ml-usd">≈ USD ${Math.round(item.precio/dolarBlue)}</span>
+                ${item.envio ? '<span class="ml-ship">Envío gratis</span>' : ''}
+              </div>
+              <div class="ml-meta" style="margin-top:3px">
+                <span class="ml-seller">🏪 ${item.vendedor}</span>
+                <span class="ml-loc">📍 ${item.loc}</span>
+              </div>
+            </div>
+            <button class="btn-add" id="add-${idx}-${i}"
+              onclick="agregarCot(${item.precio},'${esc(item.titulo.substring(0,45))}',${idx},${i})">
+              Agregar
+            </button>
+          </div>`).join('')}
+      </div>`;
+  }
+}
+
+function getMLItems(query) {
+  const q = query.toLowerCase();
+  for (const key of Object.keys(ML_DATA)) {
+    if (q.includes(key) || key.includes(q.substring(0,20))) {
+      return ML_DATA[key].map(i => ({ ...i, emoji: getEmoji(key) }));
+    }
+  }
+  return [{ titulo:`Repuesto — ${query}`, precio: 85000+Math.floor(Math.random()*200000), vendedor:'AutopartesGeneral', envio:true, loc:'Buenos Aires', emoji:'🔲' }];
+}
+
+function getEmoji(key) {
+  if (key.includes('faro') || key.includes('luz')) return '💡';
+  if (key.includes('parabrisas') || key.includes('vidrio')) return '🪟';
+  if (key.includes('espejo')) return '🔲';
+  if (key.includes('puerta')) return '🚪';
+  return '🔲';
+}
+
+// ── COT ────────────────────────────────────────────────────
+function agregarCot(precio, titulo, idx, itemIdx) {
+  const btn = document.getElementById(`add-${idx}-${itemIdx}`);
+  if (btn?.classList.contains('added')) return;
+  if (btn) { btn.classList.add('added'); btn.textContent = '✓ Agregado'; }
+  cotItems.push({ titulo, precio });
+  cotTotal += precio;
+  renderCot();
+}
+
+function renderCot() {
+  const el = document.getElementById('cot-items');
+  const totalBox = document.getElementById('cot-total-box');
+  const guardarBtn = document.getElementById('btn-guardar');
+  const tag = document.getElementById('cot-tag');
+  if (!cotItems.length) {
+    el.innerHTML = '<div class="cot-empty">Agregue ítems desde MercadoLibre</div>';
+    totalBox.style.display = 'none';
+    if (guardarBtn) guardarBtn.style.display = 'none';
+    tag.style.display = 'none';
+    return;
+  }
+  el.innerHTML = cotItems.map((it,i) => `
+    <div class="cot-row" style="animation-delay:${i*0.04}s">
+      <span style="font-size:11px;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(it.titulo)}">${it.titulo}</span>
+      <span class="cot-price">$${it.precio.toLocaleString('es-AR')}</span>
+    </div>`).join('');
+  totalBox.style.display = 'block';
+  document.getElementById('cot-total-price').textContent = '$' + cotTotal.toLocaleString('es-AR');
+  document.getElementById('cot-total-usd').textContent = `≈ USD ${Math.round(cotTotal/dolarBlue)}`;
+  if (guardarBtn) guardarBtn.style.display = 'flex';
+  tag.style.display = 'flex';
+}
+
+function guardarExpediente() {
+  alert(`✅ Expediente guardado correctamente\n\nNúmero: SIN-2025-00442\nTotal: $${cotTotal.toLocaleString('es-AR')}\nEstado: Pendiente de revisión\n\nSe notificó al supervisor asignado.`);
+  navTo('v-backoffice');
+}
+
+// ── BACK OFFICE ────────────────────────────────────────────
+const ESTADO_MAP = {
+  pendiente: '<span class="tag tag-pending">Pendiente</span>',
+  revision:  '<span class="tag tag-review">En revisión</span>',
+  aprobado:  '<span class="tag tag-approved">Aprobado</span>',
+  rechazado: '<span class="tag tag-rejected">Rechazado</span>',
+};
+
+function renderBO(filter) {
+  const tbody = document.getElementById('bo-tbody');
+  if (!tbody) return;
+  const list = filter && filter !== 'todos' ? EXPEDIENTES.filter(e => e.estado === filter) : EXPEDIENTES;
+  tbody.innerHTML = list.map((e,i) => `
+    <tr onclick="openDetail(${EXPEDIENTES.indexOf(e)})">
+      <td><div class="exp-num">${e.num}</div><div class="exp-auto">${e.patente}</div></td>
+      <td style="font-size:12px;color:var(--text-muted)">${e.fecha}</td>
+      <td>${e.asegurado}</td>
+      <td style="font-size:12px">${e.auto}</td>
+      <td style="font-size:12px">${e.tipo}</td>
+      <td><span style="font-family:'Barlow Condensed';font-weight:700;font-size:14px;color:var(--navy)">$${e.total.toLocaleString('es-AR')}</span></td>
+      <td>${ESTADO_MAP[e.estado]}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openDetail(${EXPEDIENTES.indexOf(e)})">Ver</button></td>
+    </tr>`).join('');
+}
+
+function filterBO(btn, filter) {
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBO(filter);
+  closeDetail();
+}
+
+function openDetail(idx) {
+  const e = EXPEDIENTES[idx];
+  if (!e) return;
+  activeDetailIdx = idx;
+  const panel = document.getElementById('detail-panel');
+  panel.classList.add('visible');
+  document.getElementById('d-num').textContent = e.num;
+  document.getElementById('d-title').textContent = `${e.tipo} — ${e.auto}`;
+  const tagEl = document.getElementById('d-tag');
+  tagEl.className = `tag tag-${e.estado === 'revision' ? 'review' : e.estado}`;
+  tagEl.textContent = e.estado === 'revision' ? 'En revisión' : e.estado.charAt(0).toUpperCase()+e.estado.slice(1);
+  document.getElementById('d-asegurado').textContent = e.asegurado;
+  document.getElementById('d-poliza').textContent = e.poliza;
+  document.getElementById('d-patente').textContent = e.patente;
+  document.getElementById('d-auto').textContent = e.auto;
+  document.getElementById('d-tipo').textContent = e.tipo;
+  document.getElementById('d-conf').textContent = e.conf + '% (IA)';
+  document.getElementById('d-items').innerHTML = e.items.map(it => `
+    <div class="detail-item">
+      <span>${it.pieza}</span>
+      <span class="detail-item-price">$${it.precio.toLocaleString('es-AR')}</span>
+    </div>`).join('');
+  document.getElementById('d-total').textContent = '$' + e.total.toLocaleString('es-AR');
+  panel.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel')?.classList.remove('visible');
+  activeDetailIdx = null;
+}
+
+function cambiarEstado(nuevoEstado) {
+  if (activeDetailIdx === null) return;
+  EXPEDIENTES[activeDetailIdx].estado = nuevoEstado;
+  renderBO();
+  openDetail(activeDetailIdx);
+  const msg = nuevoEstado === 'aprobado' ? '✅ Expediente aprobado. Se notificará al asegurado.' : '❌ Expediente rechazado. Se generará comunicación al asegurado.';
+  alert(msg);
+}
+
+// ── UTILS ──────────────────────────────────────────────────
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function esc(s) { return (s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+// ── DÓLAR REAL ─────────────────────────────────────────────
+async function fetchDolar() {
+  try {
+    const res = await fetch('/api/dolar');
+    const data = await res.json();
+    if (data.blue) {
+      dolarBlue = data.blue;
+      const fmt = '$' + data.blue.toLocaleString('es-AR');
+      document.querySelectorAll('.dolar-blue-val').forEach(el => el.textContent = fmt);
+    }
+  } catch(e) {
+    console.warn('Dólar API no disponible, usando valor de referencia');
+  }
+}
+
+// ── DRAWER ─────────────────────────────────────────────────
+function openDrawer() {
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('sidebar-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.getElementById('sidebar-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── INIT ───────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  renderBO();
+  fetchDolar();
+  setInterval(fetchDolar, 5 * 60 * 1000);
+});
+</script>
+
+<!-- ── DRAWER (mobile) ─────────────────────────────── -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="sidebar-drawer" id="sidebar-drawer">
+  <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  <div style="padding:28px 20px 20px;border-bottom:1px solid rgba(255,255,255,0.07)">
+    <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#fff">Siniestro<span style="color:#c8a84b">.</span>AI</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:3px">Peritaje Digital</div>
+  </div>
+  <nav style="flex:1;padding:16px 10px;display:flex;flex-direction:column;gap:2px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:10px 12px 6px">Principal</div>
+    <button class="nav-item" onclick="navTo('v-operador')"><span class="nav-icon">▦</span> Dashboard</button>
+    <button class="nav-item" onclick="navTo('v-analisis')"><span class="nav-icon">◎</span> Nuevo peritaje</button>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:10px 12px 6px">Gestión</div>
+    <button class="nav-item" onclick="navTo('v-backoffice')"><span class="nav-icon">☰</span> Expedientes <span class="nav-badge">3</span></button>
+    <button class="nav-item" onclick="alert('Módulo en desarrollo')"><span class="nav-icon">◈</span> Reportes</button>
+    <button class="nav-item" onclick="alert('Módulo en desarrollo')"><span class="nav-icon">◇</span> Configuración</button>
+  </nav>
+  <div style="padding:14px 16px;border-top:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:10px">
+    <div style="width:32px;height:32px;border-radius:50%;background:var(--navy-mid);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:#fff;flex-shrink:0">MG</div>
+    <div><div style="font-size:12px;color:rgba(255,255,255,0.75);font-weight:500">Martín González</div><div style="font-size:10px;color:rgba(255,255,255,0.35)">Perito Senior</div></div>
+  </div>
+</div>
+
+<!-- ── BOTTOM NAV ───────────────────────────────────── -->
+<nav class="bottom-nav" id="bottom-nav" style="display:none">
+  <button class="bn-item" data-view="v-operador" onclick="navTo('v-operador')">
+    <span class="bn-icon">▦</span>
+    <span class="bn-label">Inicio</span>
+  </button>
+  <button class="bn-item" data-view="v-analisis" onclick="navTo('v-analisis')">
+    <span class="bn-icon">◎</span>
+    <span class="bn-label">Peritaje</span>
+  </button>
+  <button class="bn-item" data-view="v-backoffice" onclick="navTo('v-backoffice')">
+    <span class="bn-icon">☰</span>
+    <span class="bn-label">Expedientes</span>
+    <span class="bn-badge">3</span>
+  </button>
+  <button class="bn-item" onclick="openDrawer()">
+    <span class="bn-icon">≡</span>
+    <span class="bn-label">Menú</span>
+  </button>
+</nav>
+
+</body>
+</html>
