@@ -1,7 +1,7 @@
 // api/ml.js — Proxy para MercadoLibre Argentina
 // La API pública de ML no requiere auth, pero el llamado debe ir desde el servidor (CORS)
 
-const fetch = require('node-fetch');
+
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');

@@ -1,7 +1,7 @@
 // api/analizar.js — Vercel Serverless Function
 // Soporta Gemini Flash (gratis) y Claude (de pago) según env var AI_PROVIDER
 
-const fetch = require('node-fetch');
+
 
 const PROMPT = `Sos un perito de seguros de autos experto en el mercado argentino.
 Analizá esta imagen de un auto dañado y respondé SOLO con un JSON válido, sin texto adicional:
