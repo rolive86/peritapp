@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
       if (dolarData.venta) dolarBlue = dolarData.venta;
     } catch {}
 
-    const token = await getMLToken();
+    const token = "APP_USR-4981921933814308-032616-1482df7f6b845334671997ba0b43e0a9-172235955";
     const mlUrl = `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(q)}&limit=${limit}&condition=new`;
     const mlRes = await fetch(mlUrl, {
       headers: {
