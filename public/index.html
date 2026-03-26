@@ -2215,35 +2215,15 @@ async function buscarML(query, idx) {
   mlCard.scrollIntoView({ behavior:'smooth', block:'nearest' });
 
   try {
-    // Llamada directa al browser — ML permite CORS desde browsers, bloquea datacenters
-    const r = await fetch(
-      `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(query)}&limit=5&condition=new`,
-      { headers: { 'Accept': 'application/json' } }
-    );
-    if (!r.ok) throw new Error(`ML respondió ${r.status}`);
+    const r = await fetch(`/api/ml?q=${encodeURIComponent(query)}&limit=5`);
+    if (!r.ok) throw new Error(`API respondió ${r.status}`);
     const data = await r.json();
+    if (data.dolar_blue) dolarBlue = data.dolar_blue;
 
-    const rawItems = data.results || [];
-    if (!rawItems.length) {
-      document.getElementById('ml-body').innerHTML =
-        `<div style="padding:16px;font-size:12px;color:var(--text-muted)">Sin resultados para "${query}". Probá una búsqueda más general.</div>`;
-      document.getElementById('ml-count-text').textContent = '0 resultados';
-      return;
-    }
-
-    const items = rawItems.map(item => ({
-      titulo: item.title,
-      precio: Math.round(item.price),
-      precio_usd: Math.round(item.price / dolarBlue),
-      envio_gratis: item.shipping?.free_shipping || false,
-      vendedor: item.seller?.nickname || '',
-      thumbnail: (item.thumbnail || '').replace('http://', 'https://'),
-      link: item.permalink,
-      ubicacion: item.seller_address?.city?.name || item.seller_address?.state?.name || '',
-    }));
+    const items = data.items || [];
     if (!items.length) {
       document.getElementById('ml-body').innerHTML =
-        `<div style="padding:16px;font-size:12px;color:var(--text-muted)">Sin resultados para "${query}". Probá una búsqueda más general.</div>`;
+        `<div style="padding:16px;font-size:12px;color:var(--text-muted)">Sin resultados para "${query}".</div>`;
       document.getElementById('ml-count-text').textContent = '0 resultados';
       return;
     }
@@ -2252,11 +2232,12 @@ async function buscarML(query, idx) {
     document.getElementById('ml-body').innerHTML = `
       <div class="ml-items">
         ${items.map((item,i) => `
-          <div class="ml-item" style="animation-delay:${i*0.06}s">
+          <div class="ml-item" style="animation-delay:${i*0.06}s;cursor:pointer"
+               onclick="window.open('${item.link}','_blank')">
             <div class="ml-thumb">
               ${item.thumbnail
-                ? `<img src="${item.thumbnail}" alt="" onerror="this.style.display='none';this.parentNode.textContent='🔲'">`
-                : getEmoji(query)}
+                ? `<img src="${item.thumbnail}" alt="${esc(item.titulo)}" style="width:100%;height:100%;object-fit:cover;border-radius:4px" onerror="this.parentNode.innerHTML='🔲'">`
+                : '🔲'}
             </div>
             <div class="ml-info">
               <div class="ml-title" title="${esc(item.titulo)}">${item.titulo}</div>
@@ -2271,39 +2252,18 @@ async function buscarML(query, idx) {
               </div>
             </div>
             <button class="btn-add" id="add-${idx}-${i}"
-              onclick="agregarCot(${item.precio},'${esc(item.titulo.substring(0,45))}',${idx},${i})">
+              onclick="event.stopPropagation();agregarCot(${item.precio},'${esc(item.titulo.substring(0,45))}',${idx},${i})">
               Agregar
             </button>
           </div>`).join('')}
       </div>`;
   } catch(err) {
-    // Fallback to mock data if API fails (useful for local dev)
-    console.warn('[ML] API falló, usando datos de demo:', err.message);
-    const items = getMLItems(query);
-    document.getElementById('ml-count-text').textContent = `${items.length} resultados (demo)`;
-    document.getElementById('ml-body').innerHTML = `
-      <div class="ml-items">
-        ${items.map((item,i) => `
-          <div class="ml-item" style="animation-delay:${i*0.06}s">
-            <div class="ml-thumb">${item.emoji || getEmoji(query)}</div>
-            <div class="ml-info">
-              <div class="ml-title" title="${esc(item.titulo)}">${item.titulo}</div>
-              <div class="ml-meta">
-                <span class="ml-price">$${item.precio.toLocaleString('es-AR')}</span>
-                <span class="ml-usd">≈ USD ${Math.round(item.precio/dolarBlue)}</span>
-                ${item.envio ? '<span class="ml-ship">Envío gratis</span>' : ''}
-              </div>
-              <div class="ml-meta" style="margin-top:3px">
-                <span class="ml-seller">🏪 ${item.vendedor}</span>
-                <span class="ml-loc">📍 ${item.loc}</span>
-              </div>
-            </div>
-            <button class="btn-add" id="add-${idx}-${i}"
-              onclick="agregarCot(${item.precio},'${esc(item.titulo.substring(0,45))}',${idx},${i})">
-              Agregar
-            </button>
-          </div>`).join('')}
-      </div>`;
+    console.warn('[ML] Error:', err.message);
+    document.getElementById('ml-body').innerHTML =
+      `<div style="padding:16px"><div style="background:var(--danger-bg);border-left:3px solid var(--danger);border-radius:5px;padding:12px;font-size:12px;color:var(--danger)">
+        Error al consultar MercadoLibre: ${err.message}
+      </div></div>`;
+    document.getElementById('ml-count-text').textContent = 'Error';
   }
 }
 
