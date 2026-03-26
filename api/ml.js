@@ -1,7 +1,18 @@
-// api/ml.js — Proxy para MercadoLibre Argentina
-// La API pública de ML no requiere auth, pero el llamado debe ir desde el servidor (CORS)
+let mlToken = null;
+let mlTokenExpiry = 0;
 
-
+async function getMLToken() {
+  if (mlToken && Date.now() < mlTokenExpiry) return mlToken;
+  const r = await fetch('https://api.mercadolibre.com/oauth/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `grant_type=client_credentials&client_id=${process.env.ML_APP_ID}&client_secret=${process.env.ML_SECRET}`
+  });
+  const data = await r.json();
+  mlToken = data.access_token;
+  mlTokenExpiry = Date.now() + (data.expires_in - 300) * 1000;
+  return mlToken;
+}
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,48 +20,38 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const { q, limit = 6 } = req.query;
-  if (!q) return res.status(400).json({ error: 'Falta parámetro q' });
+  if (!q) return res.status(400).json({ error: 'Falta parametro q' });
 
   try {
-    // Obtener cotización del dólar para conversión
     let dolarBlue = 1298;
     try {
-      const dolarRes = await fetch('https://dolarapi.com/v1/dolares/blue', { timeout: 3000 });
+      const dolarRes = await fetch('https://dolarapi.com/v1/dolares/blue');
       const dolarData = await dolarRes.json();
       if (dolarData.venta) dolarBlue = dolarData.venta;
-    } catch { /* usar fallback */ }
+    } catch {}
 
-    // Buscar en ML Argentina — MLA = Argentina
-    // Filtro condition=new para evitar usados
+    const token = await getMLToken();
     const mlUrl = `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(q)}&limit=${limit}&condition=new`;
-
     const mlRes = await fetch(mlUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
-      },
-      timeout: 8000
+      }
     });
 
-    if (!mlRes.ok) {
-      throw new Error(`MercadoLibre respondió ${mlRes.status}`);
-    }
+    if (!mlRes.ok) throw new Error(`MercadoLibre respondio ${mlRes.status}`);
 
     const mlData = await mlRes.json();
-
     const items = (mlData.results || []).map(item => ({
       id: item.id,
       titulo: item.title,
       precio: Math.round(item.price),
       precio_usd: Math.round(item.price / dolarBlue),
-      moneda: item.currency_id,
       envio_gratis: item.shipping?.free_shipping || false,
-      condicion: item.condition,
-      vendedor: item.seller?.nickname || 'Vendedor',
+      vendedor: item.seller?.nickname || '',
       thumbnail: (item.thumbnail || '').replace('http://', 'https://'),
       link: item.permalink,
       ubicacion: item.seller_address?.city?.name || item.seller_address?.state?.name || '',
-      ventas: item.sold_quantity || 0,
     }));
 
     return res.status(200).json({
